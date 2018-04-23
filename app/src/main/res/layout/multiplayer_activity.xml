@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/multiplayer_bg"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<RelativeLayout
+		android:id="@+id/multiplayer_videoly"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_alignParentStart="true"
+		android:layout_alignParentTop="true">
+
+	</RelativeLayout>
+
+	<FrameLayout
+		android:id="@+id/id_fragment_container"
+		android:layout_width="215dp"
+		android:layout_height="237dp"
+		android:layout_alignParentBottom="true"
+		android:layout_alignParentRight="true"
+		android:layout_marginBottom="10dp"
+		android:layout_marginRight="20dp">
+
+	</FrameLayout>
+
+	<include
+		android:id="@+id/titlebar_layout"
+		layout="@layout/com_titlebar_layout"
+		android:visibility="gone" />
+
+</RelativeLayout>

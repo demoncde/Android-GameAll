@@ -1,0 +1,15 @@
+<resources>
+	<string name="app_name">游戏互动</string>
+	<string name="version_info">http://www.3ttech.cn version %1$s</string>
+	<string name="main_title">房号：%1$s</string>
+	<string name="main_broadcaster">主播：%1$s</string>
+	<string name="main_secondAnchor">副播：%1$s</string>
+	<string name="main_viewer">观众：%1$s</string>
+	<string name="main_local_role">角色：%1$s</string>
+	<string name="main_audioup">\u2191A-%1$sK/S</string>
+	<string name="main_videoups">\u2191V-%1$sK/S</string>
+	<string name="videoly_speaking">发言中&#8230;</string>
+	<string name="videoly_videodown">\u2193V-%1$sK/S</string>
+	<string name="videoly_audiodown">\u2193A-%1$sK/S</string>
+	<string name="titlebar_audience_num">观众:%1$s</string>
+</resources>

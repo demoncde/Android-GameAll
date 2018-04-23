@@ -1,0 +1,39 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+	<dimen name="font_com_size_12">12sp</dimen>
+
+	<dimen name="splash_title_margion_top">77dp</dimen>
+
+    <dimen name="main_btn_com_margin_20">20dp</dimen>
+	<dimen name="main_btn_com_margin_16">16dp</dimen>
+	<dimen name="main_btn_com_margin_24">24dp</dimen>
+
+	<dimen name="videolayout_btn_com_margin_4">4dp</dimen>
+	<dimen name="videolayout_btn_com_margin_6">6dp</dimen>
+	<dimen name="videolayout_btn_com_margin_8">8dp</dimen>
+
+	<dimen name="videolayout_size_width">77dp</dimen>
+	<dimen name="videolayout_size_height">77dp</dimen>
+	<dimen name="videolayout_padding">1.4dp</dimen>
+	<dimen name="videolayout_margin">4.8dp</dimen>
+
+	<dimen name="videolayout_audio_margin">12dp</dimen>
+	<dimen name="videolayout_audio_left_margin">9.6dp</dimen>
+	<dimen name="videolayout_audio_size">43.2dp</dimen>
+	<dimen name="videolayout_audio_padding">0.96dp</dimen>
+
+	<dimen name="videolayout_chess_video_margin_90">43.2dp</dimen>
+	<dimen name="videolayout_chess_video_margin_40">19.2dp</dimen>
+	<dimen name="videolayout_chess_video_margin_180">86.4dp</dimen>
+
+	<dimen name="videolayout_chess_video_margin_90_pad">83.2dp</dimen>
+	<dimen name="videolayout_chess_video_margin_40_pad">59.2dp</dimen>
+	<dimen name="videolayout_chess_video_margin_180_pad">166.4dp</dimen>
+
+	<dimen name="videolayout_chess_video_margin_100">48dp</dimen>
+	<dimen name="videolayout_chess_video_margin_130">62.4dp</dimen>
+	<dimen name="videolayout_chess_video_margin_220">105.6dp</dimen>
+	<dimen name="videolayout_chess_video_margin_280">134.4dp</dimen>
+	<dimen name="videolayout_chess_video_margin_280_pad">224.4dp</dimen>
+</resources>

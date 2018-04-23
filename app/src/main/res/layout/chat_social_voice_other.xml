@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="25dp">
+
+    <RelativeLayout
+        android:id="@+id/voice"
+        android:layout_width="86dp"
+        android:layout_height="25dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/voice_bg">
+
+        <TextView
+            android:id="@+id/message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="大海知音"
+            android:textColor="#00636F"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:layout_width="13dp"
+            android:layout_height="13dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/shoutingright" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_marginLeft="9dp"
+        android:layout_toRightOf="@+id/voice"
+        android:text="15''"
+        android:textColor="#929292"
+        android:textSize="12sp" />
+
+</RelativeLayout>

@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		xmlns:tools="http://schemas.android.com/tools"
+	>
+
+	<data>
+
+		<variable
+			name="splashWindow"
+			type="com.tttrtcgame.helper.DBSplashActivity"/>
+	</data>
+
+	<android.support.constraint.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="@drawable/splash_bg"
+		android:clipToPadding="true"
+		android:fitsSystemWindows="true"
+		tools:context=".ui.SplashActivity">
+
+		<TextView
+			android:id="@+id/splash_room_type_chat_rb"
+			style="@style/splash_com_btn_bg"
+			android:layout_marginStart="9.6dp"
+			android:onClick="onClickRoomTypeButton"
+			android:text="语音文字互动"
+			app:layout_constraintStart_toEndOf="@+id/splash_room_type_audio_rb"
+			app:layout_constraintTop_toTopOf="@+id/textView4"/>
+
+		<TextView
+			android:id="@+id/splash_room_type_video_rb"
+			style="@style/splash_com_btn_bg"
+			android:background="@drawable/splash_com_btn_checked"
+			android:checked="true"
+			android:onClick="onClickRoomTypeButton"
+			android:text="视频互动"
+			app:layout_constraintStart_toStartOf="@+id/splash_role_player_tv"
+			app:layout_constraintTop_toTopOf="@+id/textView4"/>
+
+		<Button
+			android:id="@+id/enter"
+			android:layout_width="321.6dp"
+			android:layout_height="37.44dp"
+			android:layout_marginBottom="43.2dp"
+			android:background="@drawable/login_enter_selector"
+			android:onClick="onClickEnterButton"
+			android:text="进入"
+			android:textColor="#000000"
+			app:layout_constraintBottom_toTopOf="@+id/company"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toRightOf="parent"/>
+
+		<ImageView
+			android:id="@+id/splash_title_icon"
+			android:layout_width="142dp"
+			android:layout_height="27dp"
+			android:layout_marginTop="76.8dp"
+			android:background="@drawable/logo"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toTopOf="parent"/>
+
+		<LinearLayout
+			android:id="@+id/room_id_ly"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="57.6dp"
+			android:orientation="horizontal"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/splash_title_icon">
+
+			<TextView
+				android:id="@+id/room_id_text"
+				android:layout_width="66dp"
+				android:layout_height="31.68dp"
+				android:layout_marginRight="13.4dp"
+				android:gravity="right|center_vertical"
+				android:singleLine="true"
+				android:text="房间:"
+				android:textColor="#FFFFFF"
+				android:textSize="15sp"
+				/>
+
+			<EditText
+				android:id="@+id/splash_room_id_et"
+				android:layout_width="249.6dp"
+				android:layout_height="31.68dp"
+				android:background="@drawable/login_edit"
+				android:ems="10"
+				android:maxLength="10"
+				android:hint="请输入房间ID"
+				android:inputType="number"
+				android:paddingLeft="12dp"
+				android:textColor="#010101"
+				android:textSize="12sp"
+				/>
+		</LinearLayout>
+
+		<Button
+			android:id="@+id/button"
+			android:layout_width="76dp"
+			android:layout_height="33dp"
+			android:layout_marginRight="8dp"
+			android:layout_marginTop="8dp"
+			android:background="@drawable/login_enter_selector"
+			android:onClick="onTestButtonClick"
+			android:text="测试"
+			android:textColor="#FFFFFF"
+			android:visibility="gone"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<TextView
+			android:id="@+id/company"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="15dp"
+			android:layout_marginEnd="8dp"
+			android:layout_marginStart="8dp"
+			android:text="@string/app_name"
+			android:textColor="#FFFFFF"
+			android:textSize="11.5sp"
+			app:layout_constraintBottom_toTopOf="@+id/version"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"/>
+
+		<TextView
+			android:id="@+id/version"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="28dp"
+			android:layout_marginEnd="8dp"
+			android:layout_marginStart="8dp"
+			android:text="@string/version_info"
+			android:textColor="#FFFFFF"
+			android:textSize="11.5sp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"/>
+
+		<TextView
+			android:id="@+id/textView"
+			android:layout_width="66dp"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="28dp"
+			android:gravity="center"
+			android:text="用户角色:"
+			android:textColor="#FFFFFF"
+			android:textSize="15sp"
+			app:layout_constraintStart_toStartOf="@+id/room_id_ly"
+			app:layout_constraintTop_toBottomOf="@+id/room_id_ly"/>
+
+		<TextView
+			android:id="@+id/splash_role_player_tv"
+			style="@style/splash_com_btn_bg"
+			android:layout_marginStart="13.44dp"
+			android:background="@drawable/splash_com_btn_checked"
+			android:onClick="onClickUserRoleButton"
+			android:text="玩家"
+			app:layout_constraintStart_toEndOf="@+id/textView"
+			app:layout_constraintTop_toTopOf="@+id/textView"/>
+
+		<TextView
+			android:id="@+id/splash_role_audience_tv"
+			style="@style/splash_com_btn_bg"
+			android:layout_marginStart="9.6dp"
+			android:onClick="onClickUserRoleButton"
+			android:text="观众"
+			app:layout_constraintStart_toEndOf="@+id/splash_role_player_tv"
+			app:layout_constraintTop_toTopOf="@+id/textView"/>
+
+		<TextView
+			android:id="@+id/textView4"
+			android:layout_width="66dp"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="24dp"
+			android:gravity="center"
+			android:text="互动方式:"
+			android:textColor="#FFFFFF"
+			android:textSize="15sp"
+			app:layout_constraintStart_toStartOf="@+id/room_id_ly"
+			app:layout_constraintTop_toBottomOf="@+id/textView"/>
+
+		<TextView
+			android:id="@+id/splash_room_type_audio_rb"
+			style="@style/splash_com_btn_bg"
+			android:layout_marginStart="9.6dp"
+			android:onClick="onClickRoomTypeButton"
+			android:text="音频互动"
+			app:layout_constraintStart_toEndOf="@+id/splash_room_type_video_rb"
+			app:layout_constraintTop_toTopOf="@+id/textView4"/>
+
+		<TextView
+			android:id="@+id/textView5"
+			android:layout_width="66dp"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="24dp"
+			android:gravity="center"
+			android:text="游戏选择:"
+			android:textColor="#FFFFFF"
+			android:textSize="15sp"
+			app:layout_constraintStart_toStartOf="@+id/room_id_ly"
+			app:layout_constraintTop_toBottomOf="@+id/textView4"/>
+
+		<TextView
+			android:id="@+id/splash_game_type_one_tv"
+			style="@style/splash_com_btn_bg"
+			android:background="@drawable/splash_com_btn_checked"
+			android:onClick="onClickRoomGameTypeButton"
+			android:text="多人游戏"
+			app:layout_constraintStart_toStartOf="@+id/splash_role_player_tv"
+			app:layout_constraintTop_toTopOf="@+id/textView5"/>
+
+		<TextView
+			android:id="@+id/splash_game_type_four_tv"
+			style="@style/splash_com_btn_bg"
+			android:layout_marginTop="14.4dp"
+			android:onClick="onClickRoomGameTypeButton"
+			android:text="棋牌游戏"
+			app:layout_constraintEnd_toEndOf="@+id/splash_game_type_one_tv"
+			app:layout_constraintTop_toBottomOf="@+id/splash_game_type_one_tv"/>
+
+		<TextView
+			android:id="@+id/splash_game_type_five_tv"
+			style="@style/splash_com_btn_bg"
+			android:layout_marginStart="9.6dp"
+			android:onClick="onClickRoomGameTypeButton"
+			android:text="社交游戏"
+			app:layout_constraintStart_toEndOf="@+id/splash_game_type_four_tv"
+			app:layout_constraintTop_toTopOf="@+id/splash_game_type_four_tv"/>
+
+		<TextView
+			android:id="@+id/splash_game_type_two_tv"
+			style="@style/splash_com_btn_bg"
+			android:layout_marginStart="9.6dp"
+			android:onClick="onClickRoomGameTypeButton"
+			android:text="竞技游戏"
+			app:layout_constraintStart_toEndOf="@+id/splash_game_type_one_tv"
+			app:layout_constraintTop_toTopOf="@+id/splash_game_type_one_tv"/>
+
+		<TextView
+			android:id="@+id/splash_game_type_three_tv"
+			style="@style/splash_com_btn_bg"
+			android:layout_marginStart="9.6dp"
+			android:onClick="onClickRoomGameTypeButton"
+			android:text="动作游戏"
+			app:layout_constraintStart_toEndOf="@+id/splash_game_type_two_tv"
+			app:layout_constraintTop_toTopOf="@+id/splash_game_type_one_tv"/>
+	</android.support.constraint.ConstraintLayout>
+</layout>

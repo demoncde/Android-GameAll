@@ -1,0 +1,58 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/chat_bg"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    tools:context="com.tttrtcgame.ui.ChatListFragment">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/chat_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/send_message">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <RelativeLayout
+        android:id="@+id/send_message"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="5dp">
+
+        <RelativeLayout
+            android:id="@+id/exchange_text_voice"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/bg99000000r5_p"
+            android:padding="5dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/jianpan" />
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/chat_voice"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/exchange_text_voice"
+            android:background="@drawable/bg99000000r5_p"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="按住说话"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
