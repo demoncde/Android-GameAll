@@ -26,7 +26,7 @@ import com.tttrtcgame.bean.JniObjs;
 import com.tttrtcgame.bean.MessageBean;
 import com.tttrtcgame.helper.MultiplayerVideoLayout;
 import com.tttrtcgame.utils.MyLog;
-import com.wushuangtech.bean.AudioChatInfo;
+import com.wushuangtech.jni.RoomJni;
 import com.wushuangtech.library.Constants;
 import com.wushuangtech.wstechapi.model.VideoCanvas;
 
@@ -89,6 +89,7 @@ public class MultiplayerActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         mHandler.removeCallbacksAndMessages(null);
+        RoomJni.getInstance().ClearGlobalStatus();
     }
 
     private void initView() {
@@ -284,17 +285,9 @@ public class MultiplayerActivity extends BaseActivity {
                                 RENDER_MODE_HIDDEN, mSurfaceView));
                     }
                     MyLog.d("openUserVideo result : " + result);
-                    mSurfaceView.setZOrderOnTop(false);
-                    if (userID != LocalConfig.mLoginUserID) {
-                        if (mLayout.getOrder() == MultiplayerVideoLayout.FIRST_VIDEO_LAYOUT) {
-                            mSurfaceView.setBackgroundResource(R.drawable.def_video_icon_one);
-                        } else if (mLayout.getOrder() == MultiplayerVideoLayout.SECOND_VIDEO_LAYOUT) {
-                            mSurfaceView.setBackgroundResource(R.drawable.def_video_icon_two);
-                        } else if (mLayout.getOrder() == MultiplayerVideoLayout.THIRD_VIDEO_LAYOUT) {
-                            mSurfaceView.setBackgroundResource(R.drawable.def_video_icon_three);
-                        }
-                    }
-                    mFrameLayout.addView(mSurfaceView);
+                    mSurfaceView.setZOrderOnTop(true);
+                    RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(-1, -1);
+                    mFrameLayout.addView(mSurfaceView, params1);
 
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                             RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -308,6 +301,7 @@ public class MultiplayerActivity extends BaseActivity {
             });
             mTTTEngine.muteRemoteAudioStream(enterUserInfo.getId(), false);
             enterUserInfo.setVideoOpen(true);
+
             mActivityVideoBG.addView(mLayout);
             mShowingDevices.put(enterUserInfo, mLayout);
             mExcludeView.add(mLayout);
@@ -324,7 +318,7 @@ public class MultiplayerActivity extends BaseActivity {
      */
     private synchronized void adJustRemoteViewDisplay(boolean isVisibile, EnterUserInfo info) {
         long userID = info.getId();
-        MyLog.d("openUserVideo adJustRemoteViewDisplay " +
+        MyLog.d("zhxopenUserVideo adJustRemoteViewDisplay " +
                 "User ID : " + info.getId() + " | mShowingDevices size : " + mShowingDevices.size()
                 + " | isVisibile : " + isVisibile
                 + " | mPersons size : " + mPersons.size());
@@ -352,6 +346,7 @@ public class MultiplayerActivity extends BaseActivity {
                     }
                     mActivityVideoBG.removeView(value);
                     mExcludeView.remove(value);
+                    mShowingDevices.remove(removeUser);
                     break;
                 }
             }
@@ -370,7 +365,7 @@ public class MultiplayerActivity extends BaseActivity {
 
                 long uid = mJniObjs.mUid;
                 int identity = mJniObjs.mIdentity;
-                MyLog.d("openUserVideo CALL_BACK_ON_USER_JOIN user id : " + uid);
+                MyLog.d("openUserVideotest CALL_BACK_ON_USER_JOIN user id : " + uid);
                 EnterUserInfo userInfo = new EnterUserInfo(uid, identity);
                 addListData(userInfo);
                 if (identity == Constants.CLIENT_ROLE_AUDIENCE) {
@@ -389,7 +384,7 @@ public class MultiplayerActivity extends BaseActivity {
                 if (LocalConfig.mLoginRoomType == LocalConstans.ROOM_TYPE_CHAT) return;
 
                 long offLineUserID = mJniObjs.mUid;
-                MyLog.d("openUserVideo CALL_BACK_ON_USER_OFFLINE user id : " + offLineUserID);
+                MyLog.d("openUserVideotest CALL_BACK_ON_USER_OFFLINE user id : " + offLineUserID);
                 EnterUserInfo enterUserInfo = removeListData(offLineUserID);
                 if (enterUserInfo != null) {
                     if (enterUserInfo.getRole() == Constants.CLIENT_ROLE_AUDIENCE) {
@@ -459,33 +454,20 @@ public class MultiplayerActivity extends BaseActivity {
             case CALL_BACK_ON_FIRST_VIDEO_FRAME:
                 long videoFrameUid = mJniObjs.mUid;
                 MyLog.w("CALL_BACK_ON_FIRST_VIDEO_FRAME : " + videoFrameUid);
-                for (Map.Entry<EnterUserInfo, MultiplayerVideoLayout> next : mShowingDevices.entrySet()) {
-                    EnterUserInfo key = next.getKey();
-                    if (videoFrameUid == key.getId()) {
-                        MultiplayerVideoLayout value = next.getValue();
-                        value.getSurfaceView().setBackgroundColor(Color.TRANSPARENT);
-                    }
-                }
                 break;
             case CALL_BACK_ON_CHAT_MESSAGE_SENT:
-                String sSeqID = mJniObjs.msSeqID;
-                int error = mJniObjs.error;
-//                Toast.makeText(this, "receiveCallBack: sSeqID:" + sSeqID + " | error:" + error, Toast.LENGTH_LONG).show();
+                int reciveType = mJniObjs.type;
+                String reciveData = mJniObjs.strData;
+                int time = mJniObjs.audioTime;
+                mChatListFragment.addMessage(new MessageBean((int)LocalConfig.mLoginUserID, reciveType, reciveData, time));
                 break;
             case CALL_BACK_ON_CHAT_MESSAGE_RECIVED:
                 long nSrcUserID = mJniObjs.nSrcUserID;
                 int type = mJniObjs.type;
-                String id = mJniObjs.msSeqID;
                 String strData = mJniObjs.strData;
-//                Toast.makeText(this, "receiveCallBack: nSrcUserID:" + nSrcUserID + " | type:" + type + " | id:" + id + " | strData:" + strData, Toast.LENGTH_LONG).show();
-                Log.d("zhx", "type: " + type);
-                if (type == 3) {
-                    Gson gson = new Gson();
-                    AudioChatInfo audioChatInfo = gson.fromJson(strData, AudioChatInfo.class);
-                    mChatListFragment.addMessage(new MessageBean((int) nSrcUserID, type, audioChatInfo.audioName, audioChatInfo.audioTime));
-                } else {
-                    mChatListFragment.addMessage(new MessageBean((int) nSrcUserID, type, strData));
-                }
+                int audioTime = mJniObjs.audioTime;
+
+                    mChatListFragment.addMessage(new MessageBean((int) nSrcUserID, type, strData, audioTime));
                 break;
             case CALL_BACK_ON_AUDIO_PLAY_COMPLATION:
                 break;

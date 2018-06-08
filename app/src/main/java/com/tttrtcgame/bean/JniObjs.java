@@ -31,6 +31,7 @@ public class JniObjs implements Parcelable {
     public long nSrcUserID;
     public int type;
     public String strData;
+    public int audioTime;
 
     public RemoteVideoStats mRemoteVideoStats;
     public RemoteAudioStats mRemoteAudioStats;
@@ -62,6 +63,7 @@ public class JniObjs implements Parcelable {
         dest.writeLong(this.nSrcUserID);
         dest.writeInt(this.type);
         dest.writeString(this.strData);
+        dest.writeInt(this.audioTime);
         dest.writeParcelable(this.mRemoteVideoStats, flags);
         dest.writeParcelable(this.mRemoteAudioStats, flags);
         dest.writeParcelable(this.mLocalVideoStats, flags);
@@ -83,6 +85,7 @@ public class JniObjs implements Parcelable {
         this.nSrcUserID = in.readLong();
         this.type = in.readInt();
         this.strData = in.readString();
+        this.audioTime = in.readInt();
         this.mRemoteVideoStats = in.readParcelable(Thread.currentThread().getContextClassLoader());
         this.mRemoteAudioStats = in.readParcelable(Thread.currentThread().getContextClassLoader());
         this.mLocalVideoStats = in.readParcelable(Thread.currentThread().getContextClassLoader());

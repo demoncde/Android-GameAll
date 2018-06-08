@@ -21,6 +21,8 @@ import com.tttrtcgame.dialog.ChatDialog;
 import com.tttrtcgame.helper.SpaceItemDecoration;
 import com.wushuangtech.wstechapi.TTTRtcEngineForGamming;
 
+import java.util.UUID;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,8 +66,6 @@ public class ChatListFragment extends Fragment {
             ChatDialog chatDialog = new ChatDialog(getContext(), ChatDialog.HORIZONTAL);
             chatDialog.setOnSendMessageListener(message -> {
                 mTTTEngine.sendChatMessage(0, 1, "0", message);
-                mChatAdapter.add(new MessageBean((int)LocalConfig.mLoginUserID, 1, message));
-                mChatView.smoothScrollToPosition(mChatAdapter.getItemCount());
             });
             chatDialog.show();
         });
@@ -83,9 +83,8 @@ public class ChatListFragment extends Fragment {
                 case MotionEvent.ACTION_UP:
                     //松开事件发生后执行代码的区域
                     mMessageButton.setText("按住说话");
-                    int recordTime = mTTTEngine.stopRecordAndSendChatAudio(0);
-                    addMessage(new MessageBean((int) LocalConfig.mLoginUserID, 3, mTTTEngine.getLocalChatPath(), recordTime));
-                    mChatView.smoothScrollToPosition(mChatAdapter.getItemCount());
+                    String seqID = UUID.randomUUID().toString() + System.currentTimeMillis();
+                    mTTTEngine.stopRecordAndSendChatAudio(0, seqID);
                     break;
 
                 default:

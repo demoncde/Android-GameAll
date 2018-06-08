@@ -105,7 +105,7 @@ public class MultiplayerVideoLayout extends RelativeLayout implements ViewTreeOb
                     }
                 }
                 setLayoutParams(layoutParams);
-                setPadding(VIDEO_LAYOUT_PADDING, VIDEO_LAYOUT_PADDING, VIDEO_LAYOUT_PADDING, VIDEO_LAYOUT_PADDING);
+//                setPadding(VIDEO_LAYOUT_PADDING, VIDEO_LAYOUT_PADDING, VIDEO_LAYOUT_PADDING, VIDEO_LAYOUT_PADDING);
                 if (mActivityCallBack != null) {
                     mActivityCallBack.prepareWorking(this);
                 }
@@ -206,7 +206,7 @@ public class MultiplayerVideoLayout extends RelativeLayout implements ViewTreeOb
             lastX = (int) event.getRawX();
             lastY = (int) event.getRawY();
         } else if (action == MotionEvent.ACTION_MOVE) {
-            updateParameters(view, event);
+            updateParameters(this, event);
             lastX = (int) event.getRawX();
             lastY = (int) event.getRawY();
         } else if (action == MotionEvent.ACTION_UP) {
@@ -236,10 +236,10 @@ public class MultiplayerVideoLayout extends RelativeLayout implements ViewTreeOb
         if ((r.bottom - r.top) - (rl.bottomMargin + view.getHeight()) <= 5) {
             rl.bottomMargin = r.bottom - r.top - view.getHeight() - 5;
         }
-
-        ((ViewGroup) view.getParent()).updateViewLayout(view, rl);
+        setLayoutParams(rl);
+//        ((ViewGroup) view.getParent()).updateViewLayout(view, rl);
         // make sure draging view is first front of all
-        view.bringToFront();
+//        view.bringToFront();
     }
 
     public void addAudioView(ImageView mAudioView, RelativeLayout.LayoutParams mParams) {

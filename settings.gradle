@@ -1,8 +1,1 @@
 include ':app'
-/*
-include ':WS_ANDROID_MOMODemo'
-project (':WS_ANDROID_MOMODemo').projectDir = new File('../WS_ANDROID_MOMODemo/')
-include ':WS_ANDROID_MOMODemo:enterconfapi'
-include ':WS_ANDROID_MOMODemo:myaudio'
-include ':WS_ANDROID_MOMODemo:myvideo'
-include ':WS_ANDROID_MOMODemo:wstechapi'*/

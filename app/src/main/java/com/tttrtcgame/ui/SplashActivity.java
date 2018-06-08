@@ -23,10 +23,12 @@ import com.tttrtcgame.utils.SharedPreferencesUtil;
 import com.wushuangtech.jni.RoomJni;
 import com.wushuangtech.library.Constants;
 import com.wushuangtech.wstechapi.TTTRtcEngine;
+import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 
 public class SplashActivity extends BaseActivity {
@@ -50,6 +52,9 @@ public class SplashActivity extends BaseActivity {
         // 权限申请
         AndPermission.with(this)
                 .permission(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO)
+                .onGranted(permissions -> {
+
+                })
                 .start();
 
         // 读取保存的数据
@@ -102,7 +107,6 @@ public class SplashActivity extends BaseActivity {
             mTTTEngine.enableVideo();
         } else if (LocalConfig.mLoginRoomType == LocalConstans.ROOM_TYPE_AUDIO) {
             mTTTEngine.disableVideo();
-            mTTTEngine.enableAudio();
         }
     }
 
@@ -173,8 +177,9 @@ public class SplashActivity extends BaseActivity {
             RoomJni.getInstance().setServerAddress(LocalConfig.mIP, LocalConfig.mPort);
         }
         initEngine();
+        boolean enableChat = false;
         if (LocalConfig.mLoginRoomType == LocalConstans.ROOM_TYPE_CHAT) {
-            mTTTEngine.enableChat();
+            enableChat = true;
             RoomJni.getInstance().setServerAddress("39.107.64.215", 5000);
         }
 
@@ -189,12 +194,13 @@ public class SplashActivity extends BaseActivity {
         mTTTEngine.setClientRole(LocalConfig.mLoginRole, "");
         mIsLoging = true;
         mTTTRtcEngineHelper.splashShowWaittingDialog();
+        boolean finalEnableChat = enableChat;
         new Thread(() -> {
             // 设置频道类型
             int results = mTTTEngine.setChannelProfile(Constants.CHANNEL_PROFILE_GAME_FREE_MODE);
-            MyLog.d("setChannelProfile result : " + results);
+//            MyLog.d("setChannelProfile result : " + results);
             // 进入频道
-            int result = mTTTEngine.joinChannel("", String.valueOf(LocalConfig.mLoginRoomID), LocalConfig.mLoginUserID);
+            int result = mTTTEngine.joinChannel("", String.valueOf(LocalConfig.mLoginRoomID), LocalConfig.mLoginUserID, finalEnableChat, false);
             MyLog.d("joinChannel result : " + result
                     + " | roomID : " + String.valueOf(LocalConfig.mLoginRoomID) + " | user id : " + String.valueOf(LocalConfig.mLoginUserID));
         }).start();
@@ -266,7 +272,7 @@ public class SplashActivity extends BaseActivity {
                 runOnUiThread(() -> {
                     if (errorType == Constants.ERROR_ENTER_ROOM_TIMEOUT) {
                         Toast.makeText(mContext, "超时，10秒未收到服务器返回结果", Toast.LENGTH_SHORT).show();
-                    } else if (errorType == Constants.ERROR_ENTER_ROOM_FAILED) {
+                    } else if (errorType == Constants.ERROR_ENTER_ROOM_UNKNOW) {
                         Toast.makeText(mContext, "无法连接服务器", Toast.LENGTH_SHORT).show();
                     } else if (errorType == Constants.ERROR_ENTER_ROOM_VERIFY_FAILED) {
                         Toast.makeText(mContext, "验证码错误", Toast.LENGTH_SHORT).show();

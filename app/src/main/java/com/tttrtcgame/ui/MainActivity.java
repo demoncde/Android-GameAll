@@ -25,7 +25,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.tttrtcgame.LocalConfig;
 import com.tttrtcgame.LocalConstans;
 import com.tttrtcgame.R;
@@ -39,13 +38,13 @@ import com.tttrtcgame.dialog.ChatDialog;
 import com.tttrtcgame.helper.MyVideoLayout;
 import com.tttrtcgame.helper.SpaceItemDecoration;
 import com.tttrtcgame.utils.MyLog;
-import com.wushuangtech.bean.AudioChatInfo;
 import com.wushuangtech.library.Constants;
 import com.wushuangtech.wstechapi.TTTRtcEngineForGamming;
 import com.wushuangtech.wstechapi.model.VideoCanvas;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.Vector;
 
 import static com.tttrtcgame.LocalConstans.CALL_BACK_ON_AUDIO_PLAY_COMPLATION;
@@ -112,7 +111,7 @@ public class MainActivity extends BaseActivity {
                 // 设置adapter
                 mMainChatView.setAdapter(mAdapter = new RecyclerViewAdapter());
                 mAdapter.setOnItemClickListener(audioPath -> mTTTEngine.playChatAudio(audioPath));
-                mAdapter.setOnItemLongClickListener(audioPath -> mTTTEngine.speechRecognition(MainActivity.this, audioPath));
+                mAdapter.setOnItemLongClickListener(audioPath -> mTTTEngine.speechRecognition(audioPath));
                 // 设置Item添加和移除的动画
                 mMainChatView.setItemAnimator(new DefaultItemAnimator());
                 mMainChatView.addItemDecoration(new SpaceItemDecoration(20));
@@ -170,9 +169,8 @@ public class MainActivity extends BaseActivity {
                 case MotionEvent.ACTION_UP:
                     //松开事件发生后执行代码的区域
                     mMainPressSpeak.setText("按住说话");
-                    int recordTime = mTTTEngine.stopRecordAndSendChatAudio(0);
-                    mAdapter.add(new MessageBean((int)LocalConfig.mLoginUserID, 3, mTTTEngine.getLocalChatPath(), recordTime));
-                    mMainChatView.smoothScrollToPosition(mAdapter.getItemCount());
+                    String seqID = UUID.randomUUID().toString() + System.currentTimeMillis();
+                    mTTTEngine.stopRecordAndSendChatAudio(0, seqID);
                     break;
 
 
@@ -192,8 +190,6 @@ public class MainActivity extends BaseActivity {
             ChatDialog chatDialog = new ChatDialog(this, ChatDialog.VERTICAL);
             chatDialog.setOnSendMessageListener(message -> {
                 mTTTEngine.sendChatMessage(0, 1, "0", message);
-                mAdapter.add(new MessageBean((int)LocalConfig.mLoginUserID, 1, message));
-                mMainChatView.smoothScrollToPosition(mAdapter.getItemCount());
             });
             chatDialog.show();
         });
@@ -686,24 +682,19 @@ public class MainActivity extends BaseActivity {
                 }
                 break;
             case CALL_BACK_ON_CHAT_MESSAGE_SENT:
-                String sSeqID = mJniObjs.msSeqID;
-                int error = mJniObjs.error;
-//                Toast.makeText(this, "receiveCallBack: sSeqID:" + sSeqID + " | error:" + error, Toast.LENGTH_LONG).show();
+                int reciveType = mJniObjs.type;
+                String reciveData = mJniObjs.strData;
+                int time = mJniObjs.audioTime;
+                mAdapter.add(new MessageBean((int)LocalConfig.mLoginUserID, reciveType, reciveData, time));
+                mMainChatView.smoothScrollToPosition(mAdapter.getItemCount());
                 break;
             case CALL_BACK_ON_CHAT_MESSAGE_RECIVED:
                 long nSrcUserID = mJniObjs.nSrcUserID;
                 int type = mJniObjs.type;
-                String id = mJniObjs.msSeqID;
                 String strData = mJniObjs.strData;
-//                Toast.makeText(this, "receiveCallBack: nSrcUserID:" + nSrcUserID + " | type:" + type + " | id:" + id + " | strData:" + strData, Toast.LENGTH_LONG).show();
-                Log.d("zhx", "type: " + type);
-                if (type == 3) {
-                    Gson gson = new Gson();
-                    AudioChatInfo audioChatInfo = gson.fromJson(strData, AudioChatInfo.class);
-                    mAdapter.add(new MessageBean((int) nSrcUserID, type, audioChatInfo.audioName, audioChatInfo.audioTime));
-                } else {
-                    mAdapter.add(new MessageBean((int) nSrcUserID, type, strData));
-                }
+                int audioTime = mJniObjs.audioTime;
+
+                    mAdapter.add(new MessageBean((int) nSrcUserID, type, strData, audioTime));
                 mMainChatView.smoothScrollToPosition(mAdapter.getItemCount());
                 break;
             case CALL_BACK_ON_AUDIO_PLAY_COMPLATION:

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.tttrtcgame.bean.JniObjs;
+import com.wushuangtech.bean.ChatInfo;
 import com.wushuangtech.wstechapi.TTTRtcEngineEventHandler;
 
 import java.util.ArrayList;
@@ -175,12 +176,13 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
     }
 
     @Override
-    public void OnChatMessageSent(String sSeqID, int error) {
-        Log.i("wzg", "OnChatMessageSent.... sSeqID ： " + sSeqID + " | error : " + error);
+    public void OnChatMessageSent(ChatInfo chatInfo, int error) {
+        Log.i("wzg", "OnChatMessageSent.... sSeqID ： " + chatInfo.seqID + " | error : " + error);
         JniObjs mJniObjs = new JniObjs();
         mJniObjs.mJniType = CALL_BACK_ON_CHAT_MESSAGE_SENT;
-        mJniObjs.error = error;
-        mJniObjs.msSeqID = sSeqID;
+        mJniObjs.type = chatInfo.chatType;
+        mJniObjs.strData = chatInfo.chatData;
+        mJniObjs.audioTime = chatInfo.audioDuration;
         if (mIsSaveCallBack) {
             saveCallBack(mJniObjs);
         } else {
@@ -189,14 +191,15 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
     }
 
     @Override
-    public void OnChatMessageRecived(long nSrcUserID, int type, String sSeqID, String strData) {
-        Log.i("wzg", "OnChatMessageRecived.... nSrcUserID ： " + nSrcUserID + " | type : " + type + " | sSeqID : " + sSeqID + " | strData : " + strData);
+    public void OnChatMessageRecived(long nSrcUserID, ChatInfo chatInfo) {
+        Log.i("wzg", "OnChatMessageRecived.... nSrcUserID ： " + nSrcUserID + " | type : " + chatInfo.chatType + " | sSeqID : " + chatInfo.seqID + " | strData : " + chatInfo.chatData);
         JniObjs mJniObjs = new JniObjs();
         mJniObjs.mJniType = CALL_BACK_ON_CHAT_MESSAGE_RECIVED;
         mJniObjs.nSrcUserID = nSrcUserID;
-        mJniObjs.type = type;
-        mJniObjs.msSeqID = sSeqID;
-        mJniObjs.strData = strData;
+        mJniObjs.type = chatInfo.chatType;
+        mJniObjs.msSeqID = chatInfo.seqID;
+        mJniObjs.strData = chatInfo.chatData;
+        mJniObjs.audioTime = chatInfo.audioDuration;
         if (mIsSaveCallBack) {
             saveCallBack(mJniObjs);
         } else {
@@ -205,7 +208,7 @@ public class MyTTTRtcEngineEventHandler extends TTTRtcEngineEventHandler {
     }
 
     @Override
-    public void onPlayChatAudioCompletion() {
+    public void onPlayChatAudioCompletion(String filePath) {
         Log.i("wzg", "onPlayChatAudioCompletion....");
         JniObjs mJniObjs = new JniObjs();
         mJniObjs.mJniType = CALL_BACK_ON_AUDIO_PLAY_COMPLATION;
