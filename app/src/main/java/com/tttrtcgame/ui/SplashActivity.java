@@ -48,6 +48,7 @@ public class SplashActivity extends BaseActivity {
         mBinder = DataBindingUtil.setContentView(this, R.layout.splash_activity);
         mContext = this;
         mTTTRtcEngineHelper = new TTTRtcEngineHelper(this);
+		
 
         // 权限申请
         AndPermission.with(this)
