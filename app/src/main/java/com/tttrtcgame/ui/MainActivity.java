@@ -99,26 +99,34 @@ public class MainActivity extends BaseActivity {
         initView();
         initData();
         EnterUserInfo mLocalUserInfo = new EnterUserInfo(LocalConfig.mLoginUserID, LocalConfig.mLoginRole);
+
+        // 设置布局管理器
+        mMainChatView.setLayoutManager(new LinearLayoutManager(this));
+        // 设置adapter
+        mMainChatView.setAdapter(mAdapter = new RecyclerViewAdapter());
+        mAdapter.setOnItemClickListener(audioPath -> mTTTEngine.playChatAudio(audioPath));
+        mAdapter.setOnItemLongClickListener(audioPath -> mTTTEngine.speechRecognition(audioPath));
+        // 设置Item添加和移除的动画
+        mMainChatView.setItemAnimator(new DefaultItemAnimator());
+        mMainChatView.addItemDecoration(new SpaceItemDecoration(20));
+        mAdapter.setLayoutType(1);
         if (LocalConfig.mLoginRole != Constants.CLIENT_ROLE_AUDIENCE) {
             mPlayers.add(mLocalUserInfo.getId());
             adJustRemoteViewDisplay(true, mLocalUserInfo);
             if (LocalConfig.mLoginRoomType == LocalConstans.ROOM_TYPE_CHAT) {
                 mSpeakingTV.setVisibility(View.GONE);
-                findViewById(R.id.id_social_chat).setVisibility(View.VISIBLE);
-
-                // 设置布局管理器
-                mMainChatView.setLayoutManager(new LinearLayoutManager(this));
-                // 设置adapter
-                mMainChatView.setAdapter(mAdapter = new RecyclerViewAdapter());
-                mAdapter.setOnItemClickListener(audioPath -> mTTTEngine.playChatAudio(audioPath));
-                mAdapter.setOnItemLongClickListener(audioPath -> mTTTEngine.speechRecognition(audioPath));
-                // 设置Item添加和移除的动画
-                mMainChatView.setItemAnimator(new DefaultItemAnimator());
-                mMainChatView.addItemDecoration(new SpaceItemDecoration(20));
-                mAdapter.setLayoutType(1);
             }
         } else {
             mSpeakingTV.setVisibility(View.GONE);
+        }
+
+        if (LocalConfig.mLoginRoomType == LocalConstans.ROOM_TYPE_CHAT) {
+            findViewById(R.id.id_social_chat).setVisibility(View.VISIBLE);
+            if (LocalConfig.mLoginRole != Constants.CLIENT_ROLE_AUDIENCE) {
+                findViewById(R.id.chat_controler).setVisibility(View.VISIBLE);
+            } else {
+                findViewById(R.id.chat_controler).setVisibility(View.GONE);
+            }
         }
 
         TelephonyManager tm = (TelephonyManager) getSystemService(Service.TELEPHONY_SERVICE);
@@ -693,8 +701,7 @@ public class MainActivity extends BaseActivity {
                 int type = mJniObjs.type;
                 String strData = mJniObjs.strData;
                 int audioTime = mJniObjs.audioTime;
-
-                    mAdapter.add(new MessageBean((int) nSrcUserID, type, strData, audioTime));
+                mAdapter.add(new MessageBean((int) nSrcUserID, type, strData, audioTime));
                 mMainChatView.smoothScrollToPosition(mAdapter.getItemCount());
                 break;
             case CALL_BACK_ON_AUDIO_PLAY_COMPLATION:
@@ -718,17 +725,19 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_VOLUME_UP:
-                audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
-                        AudioManager.ADJUST_RAISE,
-                        AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
-                return true;
-            case KeyEvent.KEYCODE_VOLUME_DOWN:
-                audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
-                        AudioManager.ADJUST_LOWER,
-                        AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
-                return true;
+        if (LocalConfig.mLoginRoomType == LocalConstans.ROOM_TYPE_CHAT) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_VOLUME_UP:
+                    audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+                            AudioManager.ADJUST_RAISE,
+                            AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
+                    return true;
+                case KeyEvent.KEYCODE_VOLUME_DOWN:
+                    audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+                            AudioManager.ADJUST_LOWER,
+                            AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
+                    return true;
+            }
         }
         return super.onKeyDown(keyCode, event);
     }

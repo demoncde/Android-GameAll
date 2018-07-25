@@ -48,7 +48,6 @@ public class SplashActivity extends BaseActivity {
         mBinder = DataBindingUtil.setContentView(this, R.layout.splash_activity);
         mContext = this;
         mTTTRtcEngineHelper = new TTTRtcEngineHelper(this);
-		
 
         // 权限申请
         AndPermission.with(this)
@@ -115,7 +114,7 @@ public class SplashActivity extends BaseActivity {
         mLastUserRoleView.setBackgroundResource(R.drawable.splash_com_btn_uncheck);
         switch (v.getId()) {
             case R.id.splash_role_player_tv:
-                LocalConfig.mLoginRole = Constants.CLIENT_ROLE_ANCHOR;
+                LocalConfig.mLoginRole = Constants.CLIENT_ROLE_BROADCASTER;
                 break;
             case R.id.splash_role_audience_tv:
                 LocalConfig.mLoginRole = Constants.CLIENT_ROLE_AUDIENCE;

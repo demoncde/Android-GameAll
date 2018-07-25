@@ -18,7 +18,7 @@ public class LocalConfig {
 
     public static long mLoginRoomType = LocalConstans.ROOM_TYPE_VIDEO;
 
-    public static int mLoginRole = Constants.CLIENT_ROLE_ANCHOR;
+    public static int mLoginRole = Constants.CLIENT_ROLE_BROADCASTER;
 
     public static int mLoginRoomGameType = LocalConstans.ROOM_GAME_TYPE_MULTIPLAYER;
 }

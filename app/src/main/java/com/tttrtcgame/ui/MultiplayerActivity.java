@@ -1,14 +1,16 @@
 package com.tttrtcgame.ui;
 
 import android.app.AlertDialog;
+import android.app.Service;
 import android.content.DialogInterface;
-import android.graphics.Color;
+import android.graphics.PixelFormat;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +19,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.tttrtcgame.LocalConfig;
 import com.tttrtcgame.LocalConstans;
 import com.tttrtcgame.R;
@@ -75,6 +76,7 @@ public class MultiplayerActivity extends BaseActivity {
     private boolean mIsThirdUsing;
 
     private TextView mShowChat;
+    private AudioManager audioManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,6 +85,7 @@ public class MultiplayerActivity extends BaseActivity {
         initView();
         initData();
         mTTTEngine.enableAudioVolumeIndication(300, 3);
+        audioManager = (AudioManager) getSystemService(Service.AUDIO_SERVICE);
     }
 
     @Override
@@ -248,7 +251,7 @@ public class MultiplayerActivity extends BaseActivity {
             EnterUserInfo enterUserInfo = mPersons.get(i);
             MyLog.d("openUserVideo User ID : " + enterUserInfo.getId()
                     + " | video open : " + enterUserInfo.isVideoOpen() + " | mPersons size : " + mPersons.size());
-            if (enterUserInfo.getRole() == Constants.CLIENT_ROLE_ANCHOR &&
+            if (enterUserInfo.getRole() == Constants.CLIENT_ROLE_BROADCASTER &&
                     !enterUserInfo.isVideoOpen()) {
                 MyLog.d("openUserVideo User ID : " + enterUserInfo.getId() + " | mShowingDevices size : " + mShowingDevices.size());
                 openUserVideo(enterUserInfo);
@@ -325,7 +328,7 @@ public class MultiplayerActivity extends BaseActivity {
         if (isVisibile) {
             for (int i = 0; i < mPersons.size(); i++) {
                 EnterUserInfo enterUserInfo = mPersons.get(i);
-                if (enterUserInfo.getRole() == Constants.CLIENT_ROLE_ANCHOR &&
+                if (enterUserInfo.getRole() == Constants.CLIENT_ROLE_BROADCASTER &&
                         !enterUserInfo.isVideoOpen()) {
                     openUserVideo(enterUserInfo);
                     break;
@@ -483,5 +486,24 @@ public class MultiplayerActivity extends BaseActivity {
         obtain.what = CONTROL_VOICE_IMAGE_VISIBILE;
         obtain.obj = audioView;
         mHandler.sendMessageDelayed(obtain, 1500);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (LocalConfig.mLoginRoomType == LocalConstans.ROOM_TYPE_CHAT) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_VOLUME_UP:
+                    audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+                            AudioManager.ADJUST_RAISE,
+                            AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
+                    return true;
+                case KeyEvent.KEYCODE_VOLUME_DOWN:
+                    audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+                            AudioManager.ADJUST_LOWER,
+                            AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
+                    return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
