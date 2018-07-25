@@ -105,7 +105,7 @@ public class MainActivity extends BaseActivity {
         // 设置adapter
         mMainChatView.setAdapter(mAdapter = new RecyclerViewAdapter());
         mAdapter.setOnItemClickListener(audioPath -> mTTTEngine.playChatAudio(audioPath));
-        mAdapter.setOnItemLongClickListener(audioPath -> mTTTEngine.speechRecognition(audioPath));
+        mAdapter.setOnItemLongClickListener(audioPath -> mTTTEngine.speechRecognition(this, audioPath));
         // 设置Item添加和移除的动画
         mMainChatView.setItemAnimator(new DefaultItemAnimator());
         mMainChatView.addItemDecoration(new SpaceItemDecoration(20));

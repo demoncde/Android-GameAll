@@ -51,7 +51,7 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation 'com.jaeger.statusbarutil:library:1.4.0'
     implementation 'com.yanzhenjie:permission:2.0.0-rc1'
-    implementation (name:'TTT_VIDEOSDK(0627)', ext:'aar')
+    implementation (name:'TTT_VIDEOSDK(0724)', ext:'aar')
 //    implementation project(':wstechapi')
 }
 
